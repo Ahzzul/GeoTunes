@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using Microsoft.VisualBasic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,7 +33,13 @@ namespace GeoTunes
         public MainWindow()
         {
             InitializeComponent();
-            connection = new ETSConnection();
+            string url = Interaction.InputBox("Enter the Telemetry API URL!");
+            if (string.IsNullOrEmpty(url))
+            {
+                Application.Current.Shutdown();
+                return;
+            }
+            connection = new ETSConnection(url);
             radioHandler = new RadioHandler();
             cities = connection.GetCities();
             timer = new System.Timers.Timer(1000);
@@ -64,6 +71,10 @@ namespace GeoTunes
         {
             try
             {
+                if(connection.isShuttingDown)
+                {
+                    Environment.Exit(0);
+                }
                 placement = await connection.GetPlacement();
                 cityDistances = SortedCityDistance(placement);
                 Dispatcher.Invoke(() =>
@@ -79,7 +90,7 @@ namespace GeoTunes
             }
         }
 
-        private void Debug(object sender, RoutedEventArgs e)
+        private void CopyCurrentCoordinatesToClipboard(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(connection.GetCoordinatesForJson());
         }

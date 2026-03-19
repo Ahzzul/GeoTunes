@@ -15,8 +15,17 @@ namespace GeoTunes
 {
     public class ETSConnection
     {
-        private string url = "http://172.30.80.1:25555/api/ets2/telemetry";
+        private string url;
+
+        public bool isShuttingDown = false;
+
         TelemetryData data;
+
+
+        public ETSConnection(string url)
+        {
+            this.url = url;
+        }
 
         public List<City> GetCities()
         {
@@ -45,6 +54,10 @@ namespace GeoTunes
         private async Task RefreshTelemetry()
         {
             string json = await FetchUrlAsync();
+            if(isShuttingDown)
+            {
+                Application.Current.Shutdown();
+            }
             data = JsonConvert.DeserializeObject<TelemetryData>(json);
         }
 
@@ -58,8 +71,12 @@ namespace GeoTunes
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Fehler: {ex.Message}");
-                    return "No Content";
+                    if(!isShuttingDown)
+                    {
+                        isShuttingDown = true;
+                        MessageBox.Show($"Error: {ex.Message}");
+                    }
+                    return string.Empty;
                 }
             }
         }
