@@ -1,7 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Win32;
 using System;
-using Microsoft.VisualBasic;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -27,7 +28,7 @@ namespace GeoTunes
         Placement placement;
         CityDistance[] cityDistances;
         RadioHandler radioHandler;
-        string radioPath = "D:\\GitRepo\\GeoTunes\\Radios\\";
+        string radioPath = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.FullName + "\\Radios";
 
         private System.Timers.Timer timer;
         public MainWindow()

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -29,7 +30,9 @@ namespace GeoTunes
 
         public List<City> GetCities()
         {
-            string citiesJson = File.ReadAllText(@"D:\GitRepo\GeoTunes\cities.json");
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string targetDir = Directory.GetParent(baseDirectory)?.Parent?.Parent?.FullName;
+            string citiesJson = File.ReadAllText(targetDir + "\\cities.json");
             JObject jObject = JObject.Parse(citiesJson);
             return jObject["citiesList"].ToObject<List<City>>();
             

@@ -51,10 +51,10 @@ public class AudioPlayer
 
         outputDevice.Play();
 
-        await tcs.Task; // hier wird der Aufruf blockiert, bis Audio fertig
+        await tcs.Task; // call will be blocked until mp3 finished playing
     }
 
-    // Optional: Status abfragen
+  
     public bool IsPlaying()
     {
         return isPlaying;

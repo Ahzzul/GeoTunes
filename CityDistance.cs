@@ -20,7 +20,7 @@ namespace GeoTunes
 
         public override string ToString()
         {
-            return $"{CityName} — {Distance:F2} ETSalas";
+            return $"{CityName} — {Distance:F2}";
         }
     }
 }
